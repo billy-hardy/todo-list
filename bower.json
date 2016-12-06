@@ -1,0 +1,21 @@
+{
+  "name": "todo-list",
+  "homepage": "https://github.com/billy-hardy/todo-list",
+  "authors": [
+    "Billy Hardy <billy92@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#2.0-preview",
+    "moment": "^2.17.1"
+  }
+}
