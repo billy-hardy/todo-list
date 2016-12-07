@@ -7,6 +7,14 @@ function saveTodo() {
     persistWorker.postMessage({cmd: "create", value: val});
 }
 
+function saveTodoList(todoList) {
+    persistWorker.postMessage({cmd: "create", objectType: "todoList", value: todoList});
+}
+
+data.forEach(function(todoList) {
+    saveTodoList(todoList);
+});
+
 function getAllTodos() {
     let display = document.getElementById("display");
     persistWorker.postMessage({cmd: "retrieveAll"});

@@ -1,10 +1,18 @@
-importScripts('/node_modules/idb-keyval/idb-keyval.js');
+importScripts('/node_modules/idb/lib/idb.js');
+
+const todoListDBPromise = idb.open('app', 1, upgradeDB => {
+    upgradeDB.createObjectStore('todo-lists', {keyPath: "id"});
+    upgradeDB.createObjectStore('todo-items', {keyPath: "id"});
+});
 
 self.addEventListener("message", async function({data}) {
     let cmd = data.cmd;
+    let objectType = data.objectType;
     if(cmd == "create") {
-        let success = await saveVal(data.value);
-        self.postMessage({cmd});
+        if(data.objectType == "todoList") {
+            let success = await saveTodoList(data.value);
+            self.postMessage({cmd, objectType});
+        }
     } else if(cmd == "retrieve") {
         let valToGet = data.value
         if(valToGet == null) {
@@ -16,37 +24,33 @@ self.addEventListener("message", async function({data}) {
         }
     } else if(cmd == "retrieveAll") {
         let values = await getAll();
-        //Promise.all(values).then(function(values) {
         self.postMessage({cmd, values});
-        //});
     }
 });
 
-function saveVal(value) {
-    function getUUID() {
-        function r4() {
-            function rand() {
-                return Math.floor(Math.random()*10)+'';
-            }
-            return rand()+rand()+rand()+rand();
-        }
-        return r4()+r4()+r4()+r4();
-    }
-    return idbKeyval.set(getUUID(), value);
+async function saveTodoList(todoList) {
+    let db = await todoListDBPromise;
+    write(db, "todo-lists", todoList)
 }
 
-function getKeys() {
+function write(db, objectStore, val) {
+    const tx = db.transaction(objectStore, 'readwrite');
+    tx.objectStore(objectStore).put(val);
+    return tx.complete;
+}
+
+function getAllTodoListNames() {
     return idbKeyval.keys();
 }
 
-async function getAll() {
-    let keys = await getKeys();
-    let values = await Promise.all(keys.map(function(key) {
-        return getVal(key);
+async function getAllTodoLists() {
+    let names = await getAllTodoListNames();
+    let values = await Promise.all(names.map(function(name) {
+        return getTodoList(name);
     }));
     return values;
 }
 
-async function getVal(key) {
-    return await idbKeyval.get(key);
+async function getTodoList(name) {
+    return await idbKeyval.get(name);
 }
