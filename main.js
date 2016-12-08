@@ -31,9 +31,6 @@ persistWorker.addEventListener('message', function ({data}) {
             display.innerHTML = data.value;
         }
     } else if(data.cmd == "retrieveAll") {
-        display.innerHTML = "";
-        data.values.forEach(function(todo) {
-            display.innerHTML += todo +"<br/>";
-        });
+        display.innerHTML = data.values.join("<br/>");
     }
 });
