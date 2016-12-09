@@ -1,5 +1,3 @@
-let persistWorker = new Worker("persist.js");
-
 function saveTodo() {
     let input = document.getElementById("temp");
 
