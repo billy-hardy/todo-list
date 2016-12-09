@@ -23,7 +23,7 @@ self.addEventListener("message", async function({data}) {
             self.postMessage({cmd, value});
         }
     } else if(cmd == "retrieveAll") {
-        let values = await getAll();
+        let values = await getAllTodoLists();
         self.postMessage({cmd, values});
     }
 });
