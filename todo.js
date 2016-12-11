@@ -1,5 +1,5 @@
 class TodoItemModel {
-    constructor(content, done) {
+    constructor(content = "", done = false) {
         this.id = getUUID();
         this.content = content;
         this.done = done;
@@ -15,11 +15,11 @@ class TodoItemModel {
 }
 
 class TodoListModel {
-    constructor(name, archived) {
+    constructor(name = "", archived = false, todos = []) {
         this.id = getUUID();
         this.name = name;
         this.archived = archived;
-        this.todos = [];
+        this.todos = todos;
     }
 
     add(...todos) {

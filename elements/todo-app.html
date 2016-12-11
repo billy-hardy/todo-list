@@ -1,17 +1,25 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="todo-list.html">
-<link rel="import" href="todo-item-input.html">
+<link rel="import" href="todo-list-input.html">
 
 <dom-module id="todo-app">
     <template>
         <style>
+            todo-list,
+            todo-list-input {
+                margin: 1rem;
+            }
         </style>
         <dom-repeat items="{{todoLists}}">
             <template>
-                <todo-list todo-list="{{item}}"></todo-list>
+                <todo-list todo-list="{{item}}">
+                    <span slot="name">{{item.name}}</span>
+                </todo-list>
             </template>
         </dom-repeat>
-        <todo-item-input id="todoInput" todo="{{newTodo}}"></todo-item-input>
+        <todo-list-input id="todoListInput"
+             on-todo-list="_saveTodo">
+        </todo-list-input>
     </template>
     <script>
         class TodoApp extends Polymer.Element {
@@ -22,38 +30,37 @@
                     properties: {
                         todoLists: {
                             type: Array
-                        },
-                        newTodo: {
-                            type: Object
                         }
                     }
                 };
             }
 
             _saveTodo(e) {
-                let todoList = new TodoListModel("temp", false);
-                todoList.add(e.detail);
-                this.service.saveTodoList(todoList).then(e => console.log(e));
+                let todoList = e.detail;
+                this.service.saveTodoList(todoList).then(() => {
+                    this.$.todoListInput.todoList = new TodoListModel();
+                    this._getAllTodos();
+                });
+            }
+
+            _getAllTodos() {
+                this.service.getAllTodoLists().then(todoLists => {
+                    this.todoLists = todoLists;
+                });
             }
 
             constructor() {
                 super();
                 this.service = new TodoListService("todolist");
-                this.service.getAllTodoLists().then(todoLists => {
-                    this.todoLists = todoLists;
-                });
-                this._saveTodoListener = this._saveTodo.bind(this);
+                this._getAllTodos();
             }
 
             connectedCallback() {
                 super.connectedCallback();
-                this.$.todoInput = this.root.querySelector("#todoInput");
-                this.$.todoInput.addEventListener("todo-item", this._saveTodoListener);
             }
 
             disconnectedCallback() {
                 super.disconnectedCallback();
-                this.$.todoInput.removeEventListener("todo-item", this._saveTodoListener);
             }
         }
         customElements.define(TodoApp.is, TodoApp);

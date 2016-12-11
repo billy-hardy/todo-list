@@ -16,7 +16,7 @@
                 padding: 1rem;
             }
         </style>
-        <input type="checkbox" checked="{{todo.done::input}}">
+        <input type="checkbox" checked="{{todo.done::change}}">
         <input type="text" value="{{todo.content::input}}">
         <button on-click="_marshallTodo">Save</button>
     </template>

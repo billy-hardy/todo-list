@@ -7,8 +7,6 @@
         <style>
             :host {
                 padding: 1rem;
-            }
-            div {
                 display: flex;
                 flex-direction: column;
                 background-color: brown;
@@ -16,14 +14,25 @@
             todo-item {
                 padding: 1rem;
             }
+            button {
+                display: block;
+                width: 100px;
+            }
+            button[archived] {
+                background-color: gray;
+            }
         </style>
-        <div>
-            <dom-repeat items="{{todoList.todos}}">
-                <template>
-                    <todo-item todo="{{item}}"></todo-item>
-                </template>
-            </dom-repeat>
-        </div>
+        <slot name="name"></slot>
+        <dom-repeat items="{{todoList.todos}}">
+            <template>
+                <todo-item todo="{{item}}"></todo-item>
+            </template>
+        </dom-repeat>
+        <slot></slot>
+        <button on-click="_toggleArchived"
+            archived$="{{todoList.archived}}">
+            {{_getArchiveText(todoList.archived)}}
+        </button>
     </template>
     <script>
     class TodoList extends Polymer.Element {
@@ -38,6 +47,18 @@
                 }
             }
         }
+
+        _getArchiveText(archived) {
+            if(archived) {
+                return "Unarchive";
+            }
+            return "Archive";
+        }
+
+        _toggleArchived() {
+            this.set("todoList.archived", !this.todoList.archived);
+        }
+
     }
     customElements.define(TodoList.is, TodoList);
     </script>

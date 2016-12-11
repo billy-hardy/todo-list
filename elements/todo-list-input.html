@@ -1,0 +1,62 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="todo-list.html">
+<link rel="import" href="todo-item-input.html">
+
+<dom-module id="todo-list-input">
+    <template>
+        <style>
+        :host {
+            display: flex;
+            flex-direction: column;
+            background-color: brown;
+        }
+
+        [slot=name] {
+            display: flex;
+            flex-direction: row;
+        }
+        button {
+            display: block;
+            margin: auto;
+            width: 100px;
+        }
+        </style>
+        <todo-list todo-list="{{todoList}}">
+            <div slot="name">
+                Name:
+                <input value="{{todoList.name::input}}">
+            </div>
+            <todo-item-input id="todoInput" on-todo-item="_addTodo"></todo-item-input>
+        </todo-list>
+        <button on-click="_saveTodoList">Save List</button>
+    </template>
+    <script>
+    class TodoListInput extends Polymer.Element {
+        static get is() { return 'todo-list-input';}
+
+        static get config() {
+            return {
+                properties: {
+                    todoList: {
+                        type: Object,
+                        value: function() {
+                            return new TodoListModel();
+                        }
+                    }
+                }
+            }
+        }
+
+        _addTodo(e) {
+            this.todoList.add(e.detail);
+            this.set("todoList", this.todoList);
+            this.$.todoInput.todo = new TodoItemModel();
+        }
+
+        _saveTodoList() {
+            this.dispatchEvent(new CustomEvent("todo-list", {detail: this.todoList}));
+        }
+    }
+    customElements.define(TodoListInput.is, TodoListInput);
+    </script>
+</dom-module>
