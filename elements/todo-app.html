@@ -1,0 +1,61 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="todo-list.html">
+<link rel="import" href="todo-item-input.html">
+
+<dom-module id="todo-app">
+    <template>
+        <style>
+        </style>
+        <dom-repeat items="{{todoLists}}">
+            <template>
+                <todo-list todo-list="{{item}}"></todo-list>
+            </template>
+        </dom-repeat>
+        <todo-item-input id="todoInput" todo="{{newTodo}}"></todo-item-input>
+    </template>
+    <script>
+        class TodoApp extends Polymer.Element {
+            static get is() { return 'todo-app';}
+
+            static get config() {
+                return {
+                    properties: {
+                        todoLists: {
+                            type: Array
+                        },
+                        newTodo: {
+                            type: Object
+                        }
+                    }
+                };
+            }
+
+            _saveTodo(e) {
+                let todoList = new TodoListModel("temp", false);
+                todoList.add(e.detail);
+                this.service.saveTodoList(todoList).then(e => console.log(e));
+            }
+
+            constructor() {
+                super();
+                this.service = new TodoListService("todolist");
+                this.service.getAllTodoLists().then(todoLists => {
+                    this.todoLists = todoLists;
+                });
+                this._saveTodoListener = this._saveTodo.bind(this);
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+                this.$.todoInput = this.root.querySelector("#todoInput");
+                this.$.todoInput.addEventListener("todo-item", this._saveTodoListener);
+            }
+
+            disconnectedCallback() {
+                super.disconnectedCallback();
+                this.$.todoInput.removeEventListener("todo-item", this._saveTodoListener);
+            }
+        }
+        customElements.define(TodoApp.is, TodoApp);
+    </script>
+</dom-module>

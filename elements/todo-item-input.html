@@ -1,0 +1,48 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="todo-item.html">
+
+<dom-module id="todo-item-input">
+    <template>
+        <style>
+            :host {
+                padding: 1rem;
+            }
+            paper-card {
+                display: flex;
+                flex-direction: column;
+                background-color: brown;
+            }
+            todo-item {
+                padding: 1rem;
+            }
+        </style>
+        <input type="checkbox" checked="{{todo.done::input}}">
+        <input type="text" value="{{todo.content::input}}">
+        <button on-click="_marshallTodo">Save</button>
+    </template>
+    <script>
+        class TodoItemInput extends Polymer.Element {
+            static get is() { return 'todo-item-input';}
+
+            static get config() {
+                return {
+                    properties: {
+                        todo: {
+                            type: Object,
+                            value: function() {
+                                return {
+                                    done: false
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+
+            _marshallTodo() {
+                this.dispatchEvent(new CustomEvent("todo-item", {detail: new TodoItemModel(this.todo.content, this.todo.done)}));
+            }
+        }
+        customElements.define(TodoItemInput.is, TodoItemInput);
+    </script>
+</dom-module>

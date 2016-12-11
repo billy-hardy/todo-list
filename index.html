@@ -14,26 +14,9 @@
         <script src="persist.js"></script>
         <script src="defaultData.js"></script>
         <script src="main.js"></script>
-        <link rel="import" href="elements/todo-list.html">
+        <link rel="import" href="elements/todo-app.html">
     </head>
     <body>
-        <dom-bind id="app">
-            <template>
-                <dom-repeat items="{{todoList}}">
-                    <template>
-                        <todo-list todo-list="{{item}}"></todo-list>
-                    </template>
-                </dom-repeat>
-            </template>
-            <script>
-            let app = document.getElementById("app");
-            // app.addEventListener("dom-change", function (e) {
-                let service1 = new TodoListService("todolist");
-                service1.getAllTodoLists().then(todoList => {
-                    app.todoList = todoList;
-                });
-            // });
-            </script>
-        </dom-bind>
+        <todo-app></todo-app>
     </body>
 </html>
