@@ -2,17 +2,38 @@
     <head>
         <title>Billy Hardy</title>
         <meta charset="UTF-8">
+        <script>
+            Polymer = {
+                dom: "shadow"
+            };
+        </script>
+        <script src="node_modules/idb/lib/idb.js"></script>
+        <script src="bower_components/shadycss/shadycss.min.js"></script>
         <script src="install.js"></script>
         <script src="todo.js"></script>
         <script src="persist.js"></script>
         <script src="defaultData.js"></script>
         <script src="main.js"></script>
-        <script src="node_modules/idb/lib/idb.js"></script>
+        <link rel="import" href="elements/todo-list.html">
     </head>
     <body>
-        <input type="text" id="temp">
-        <button onclick="saveTodo()">Save</button>
-        <button onclick="getAllTodos()">History</button>
-        <div id="display"></div>
+        <dom-bind id="app">
+            <template>
+                <dom-repeat items="{{todoList}}">
+                    <template>
+                        <todo-list todo-list="{{item}}"></todo-list>
+                    </template>
+                </dom-repeat>
+            </template>
+            <script>
+            let app = document.getElementById("app");
+            // app.addEventListener("dom-change", function (e) {
+                let service1 = new TodoListService("todolist");
+                service1.getAllTodoLists().then(todoList => {
+                    app.todoList = todoList;
+                });
+            // });
+            </script>
+        </dom-bind>
     </body>
 </html>

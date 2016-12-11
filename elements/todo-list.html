@@ -1,0 +1,45 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="todo-item.html">
+
+<dom-module id="todo-list">
+    <template>
+        <style>
+        :host {
+            padding: 1rem;
+        }
+            paper-card {
+                display: flex;
+                flex-direction: column;
+                background-color: brown;
+            }
+            todo-item {
+                padding: 1rem;
+            }
+        </style>
+        <paper-card>
+            <dom-repeat items="{{todoList.todos}}">
+                <template>
+                    <todo-item todo="{{item}}"></todo-item>
+                </template>
+            </dom-repeat>
+        </paper-card>
+    </template>
+    <script>
+    class TodoList extends Polymer.Element {
+        static get is() { return 'todo-list';}
+
+        static get config() {
+            return {
+                properties: {
+                    todoList: {
+                        type: Object,
+                    }
+                }
+            }
+        }
+    }
+    customElements.define(TodoList.is, TodoList);
+    </script>
+</dom-module>

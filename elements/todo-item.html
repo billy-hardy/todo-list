@@ -1,0 +1,32 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+
+<dom-module id="todo-item">
+    <template>
+        <style>
+        :host {
+            display: flex;
+            flex-direction: row;
+        }
+        </style>
+        <paper-checkbox checked="{{todo.done}}"></paper-checkbox>
+        <span>{{todo.content}}</span>
+    </template>
+    <script>
+    class TodoItem extends Polymer.Element {
+        static get is() { return 'todo-item';}
+
+        static get config() {
+            return {
+                properties: {
+                    todo: {
+                        type: Object,
+                    }
+                }
+            }
+        }
+    }
+    customElements.define(TodoItem.is, TodoItem);
+    </script>
+</dom-module>

@@ -1,4 +1,4 @@
-class TodoItem {
+class TodoItemModel {
     constructor(content, done) {
         this.id = getUUID();
         this.content = content;
@@ -14,7 +14,7 @@ class TodoItem {
     }
 }
 
-class TodoList {
+class TodoListModel {
     constructor(name, archived) {
         this.id = getUUID();
         this.name = name;
@@ -23,9 +23,9 @@ class TodoList {
     }
 
     add(...todos) {
-        this.todos.push(...todo);
+        this.todos.push(...todos);
     }
-    
+
     toJSON() {
         return {
             id: this.id,

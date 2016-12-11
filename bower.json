@@ -17,5 +17,9 @@
   "dependencies": {
     "polymer": "Polymer/polymer#2.0-preview",
     "moment": "^2.17.1"
+  },
+  "resolutions": {
+    "polymer": "2.0-preview",
+    "webcomponentsjs": "v1"
   }
 }
