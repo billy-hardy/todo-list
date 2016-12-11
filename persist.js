@@ -1,11 +1,24 @@
-const todoListDBPromise = idb.open('app', 1, upgradeDB => {
-    upgradeDB.createObjectStore('todo-lists', {keyPath: "id"});
-    upgradeDB.createObjectStore('todo-items', {keyPath: "id"});
-});
+class Service {
+    constructor(store) {
+        this.store = store
+        this.dbPromise = idb.open('app', 1, upgradeDB => {
+            upgradeDB.createObjectStore(this.store, {keyPath: "id"});
+        });
+    }
 
-class TodoListService {
-    constructor() {
+    async write(data) {
+        let db = await this.dbPromise;
+        const tx = db.transaction(this.store, 'readwrite');
+        tx.objectStore(objectStore).put(data);
+        return tx.complete;
+    }
+}
 
+
+class TodoListService extends Service {
+
+    constructor(store) {
+        super(store);
     }
 
     async function saveTodoList(todoList) {
