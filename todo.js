@@ -15,15 +15,26 @@ class TodoItemModel {
 }
 
 class TodoListModel {
-    constructor(name = "", archived = false, todos = []) {
+    constructor(name = "", archived = false, todos = [], tags = []) {
         this.id = getUUID();
         this.name = name;
         this.archived = archived;
         this.todos = todos;
+        this.tags = new Set(tags);
     }
 
     add(...todos) {
         this.todos.push(...todos);
+    }
+
+    addTag(...tags) {
+        this.tags.add(...tags);
+    }
+
+    removeTag(...tags) {
+        Array.from(tags).forEach(tag => {
+            return this.tags.delete(tag);
+        });
     }
 
     toJSON() {
@@ -31,7 +42,8 @@ class TodoListModel {
             id: this.id,
             name: this.name,
             archived: this.archived,
-            todos: this.todos
+            todos: this.todos,
+            tags: this.tags
         };
     }
 }
