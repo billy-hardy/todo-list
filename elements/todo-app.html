@@ -5,9 +5,13 @@
 <dom-module id="todo-app">
     <template>
         <style>
+            :host {
+                display: flex;
+                justify-content: center;
+            }
             todo-list,
             todo-list-input {
-                margin: 1rem;
+                margin-bottom: 1rem;
             }
             .top {
                 position: absolute;
