@@ -9,14 +9,23 @@
             todo-list-input {
                 margin: 1rem;
             }
+            .top {
+                position: absolute;
+            }
+            todo-list-input {
+                position: absolute;
+                bottom: 0;
+            }
         </style>
-        <dom-repeat items="{{todoLists}}">
-            <template>
-                <todo-list todo-list="{{item}}">
-                    <span slot="name">{{item.name}}</span>
-                </todo-list>
-            </template>
-        </dom-repeat>
+        <div class="top">
+            <dom-repeat items="{{todoLists}}">
+                <template>
+                    <todo-list todo-list="{{item}}">
+                        <span slot="name">{{item.name}}</span>
+                    </todo-list>
+                </template>
+            </dom-repeat>
+        </div>
         <todo-list-input id="todoListInput"
              on-todo-list="_saveTodo">
         </todo-list-input>
