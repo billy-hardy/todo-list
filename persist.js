@@ -18,7 +18,23 @@ class Service {
     update(data) {
         return this.dbPromise.then(db => {
             const tx = db.transaction(this.store, 'readwrite');
-            tx.objectStore(this.store).put(data[this.keypath], data);
+            tx.objectStore(this.store).put(data);
+            return tx.complete;
+        });
+    }
+
+    delete(id) {
+        return this.dbPromise.then(db => {
+            const tx = db.transaction(this.store, 'readwrite');
+            tx.objectStore(this.store).delete(id);
+            return tx.complete;
+        });
+    }
+
+    clear() {
+        return this.dbPromise.then(db => {
+            const tx = db.transaction(this.store, 'readwrite');
+            tx.objectStore(this.store).clear();
             return tx.complete;
         });
     }
@@ -54,6 +70,14 @@ class TodoListService extends Service {
     }
 
     getAllTodoLists() {
-        return this.getAll(); 
+        return this.getAll();
+    }
+
+    deleteTodoList(id) {
+        return this.delete(id);
+    }
+
+    updateTodoList(todoList) {
+        return this.update(todoList);
     }
 }
