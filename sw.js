@@ -1,5 +1,5 @@
-let CACHE_NAME = 'todo-list-cache-v0.1';
-let urlsToCache = ['/']; 
+let CACHE_NAME = 'todo-list-cache-v0.1.1';
+let urlsToCache = ['./']; 
 
 self.addEventListener('install', function(event) {
     event.waitUntil(
