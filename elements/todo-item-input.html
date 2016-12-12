@@ -5,20 +5,26 @@
     <template>
         <style>
             :host {
-                padding: 1rem;
-            }
-            paper-card {
+                padding-top: 1rem;
+                padding-bottom: 1rem;
                 display: flex;
-                flex-direction: column;
-                background-color: brown;
+                flex-direction: row;
             }
+
             todo-item {
                 padding: 1rem;
             }
+            .flex {
+                flex: 1;
+            }
+            .margin {
+                margin-right: 5px;
+                margin-left: 5px;
+            }
         </style>
         <input type="checkbox" checked="{{todo.done::change}}">
-        <input type="text" value="{{todo.content::input}}">
-        <button on-click="_marshallTodo">Save</button>
+        <input class="flex margin" type="text" value="{{todo.content::input}}">
+        <button on-click="_marshallTodo">Add</button>
     </template>
     <script>
         class TodoItemInput extends Polymer.Element {

@@ -8,22 +8,28 @@
         :host {
             display: flex;
             flex-direction: column;
-            background-color: brown;
+            background-color: var(--primary-color-800);
         }
 
-        [slot=name] {
+        .layout.horizontal {
             display: flex;
             flex-direction: row;
+        }
+        input {
+            flex: 1;
+            margin-left: 5px;
         }
         button {
             display: block;
             margin: auto;
             margin-bottom: 1rem;
             width: 100px;
+            @apply --fancy-button;
         }
         </style>
-        <todo-list todo-list="{{todoList}}">
-            <div slot="name">
+        <todo-list todo-list="{{todoList}}"
+            on-todo-list-delete="_resetTodoList">
+            <div slot="name" class="layout horizontal">
                 Name:
                 <input value="{{todoList.name::input}}">
             </div>
@@ -56,6 +62,9 @@
 
         _saveTodoList() {
             this.dispatchEvent(new CustomEvent("todo-list", {detail: this.todoList}));
+        }
+        _resetTodoList() {
+            this.todoList = new TodoListModel();
         }
     }
     customElements.define(TodoListInput.is, TodoListInput);

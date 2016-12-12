@@ -8,17 +8,24 @@
                 padding: 1rem;
                 display: flex;
                 flex-direction: column;
-                background-color: brown;
+                background-color: var(--primary-color-800);
+                color: var(--primary-text-color);
+                min-width: 280px;
             }
             todo-item {
                 padding: 1rem;
             }
             button {
-                display: block;
                 width: 100px;
+                @apply --fancy-button;
             }
             button[archived] {
                 background-color: gray;
+            }
+            .layout.horizontal {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
             }
         </style>
         <slot name="name"></slot>
@@ -28,10 +35,13 @@
             </template>
         </dom-repeat>
         <slot></slot>
-        <button on-click="_toggleArchived"
-            archived$="{{todoList.archived}}">
-            {{_getArchiveText(todoList.archived)}}
-        </button>
+        <div class="layout horizontal">
+            <button on-click="_toggleArchived"
+                archived$="{{todoList.archived}}">
+                {{_getArchiveText(todoList.archived)}}
+            </button>
+            <button on-click="_delete">Delete</button>
+        </div>
     </template>
     <script>
     class TodoList extends Polymer.Element {
@@ -56,6 +66,19 @@
 
         _toggleArchived() {
             this.set("todoList.archived", !this.todoList.archived);
+            this._fireDirty(this.todoList);
+        }
+
+        _delete() {
+            this._fireDelete(this.todoList.id);
+        }
+
+        _fireDelete(id) {
+            this.dispatchEvent(new CustomEvent("todo-list-delete", {detail: id}));
+        }
+
+        _fireDirty(todoList) {
+            this.dispatchEvent(new CustomEvent("todo-list-dirty", {detail: todoList}));
         }
 
     }

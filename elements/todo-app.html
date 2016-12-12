@@ -9,29 +9,32 @@
                 display: flex;
                 justify-content: center;
             }
-            todo-list,
-            todo-list-input {
+            todo-list {
                 margin-bottom: 1rem;
             }
             .top {
                 position: absolute;
+                top: 16px;
             }
             todo-list-input {
                 position: absolute;
-                bottom: 0;
+                bottom: 16px;
             }
         </style>
         <div class="top">
             <dom-repeat items="{{todoLists}}">
                 <template>
-                    <todo-list todo-list="{{item}}">
+                    <todo-list
+                        on-todo-list-dirty="_updateTodoList"
+                        on-todo-list-delete="_deleteTodoList"
+                        todo-list="{{item}}">
                         <span slot="name">{{item.name}}</span>
                     </todo-list>
                 </template>
             </dom-repeat>
         </div>
         <todo-list-input id="todoListInput"
-             on-todo-list="_saveTodo">
+             on-todo-list="_saveNewTodoList">
         </todo-list-input>
     </template>
     <script>
@@ -48,10 +51,25 @@
                 };
             }
 
-            _saveTodo(e) {
+            _saveNewTodoList(e) {
                 let todoList = e.detail;
                 this.service.saveTodoList(todoList).then(() => {
                     this.$.todoListInput.todoList = new TodoListModel();
+                    this._getAllTodos();
+                });
+            }
+
+            _updateTodoList(e) {
+                let todoList = e.detail;
+                this.service.updateTodoList(todoList).then(() => {
+                    console.log("Success!");
+                },() => {
+                    console.log("Failure!");
+                });
+            }
+
+            _deleteTodoList(e) {
+                this.service.deleteTodoList(e.model.item.id).then(() => {
                     this._getAllTodos();
                 });
             }
