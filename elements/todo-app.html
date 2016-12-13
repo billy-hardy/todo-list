@@ -33,6 +33,7 @@
                 </template>
             </dom-repeat>
         </div>
+        <button on-click="_publishAll">Publish All</button>
         <todo-list-input id="todoListInput"
              on-todo-list="_saveNewTodoList">
         </todo-list-input>
@@ -55,6 +56,10 @@
                 let todoList = e.detail;
                 ws.send(JSON.stringify(todoList.toJSON()));
                 this.saveTodoList(todoList);
+            }
+
+            _publishAll() {
+                ws.send(JSON.stringify(this.todoLists));
             }
 
             saveTodoList(todoList) {
