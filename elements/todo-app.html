@@ -53,6 +53,11 @@
 
             _saveNewTodoList(e) {
                 let todoList = e.detail;
+                ws.send(JSON.stringify(todoList.toJSON()));
+                this.saveTodoList(todoList);
+            }
+
+            saveTodoList(todoList) {
                 this.service.saveTodoList(todoList).then(() => {
                     this.$.todoListInput.todoList = new TodoListModel();
                     this._getAllTodos();
@@ -84,6 +89,10 @@
                 super();
                 this.service = new TodoListService("todolist");
                 this._getAllTodos();
+                ws.addEventListener("message", (e) => {
+                    let todoList = JSON.parse(e.data);
+                    this.saveTodoList(todoList);
+                });
             }
 
             connectedCallback() {
