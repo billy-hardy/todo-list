@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "",
   "main": "main.js",
-  "scripts": {},
+  "scripts": {
+      "start": "node server/websocketsServer.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/billy-hardy/todo-list.git"
