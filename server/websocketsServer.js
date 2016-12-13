@@ -1,5 +1,6 @@
 var WebSocketServer = require('ws').Server,
-    wss = new WebSocketServer({ port: 80});
+    wss = new WebSocketServer({ port: process.env.PORT});
+console.log("Deploy port: " + process.env.PORT);
 
 wss.on('connection', function connection(ws) {
     ws.on('message', function incoming(message) {
@@ -10,6 +11,4 @@ wss.on('connection', function connection(ws) {
             }
         });
     });
-
-    ws.send('something');
 });
