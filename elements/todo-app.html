@@ -54,7 +54,7 @@
 
             _saveNewTodoList(e) {
                 let todoList = e.detail;
-                ws.send(JSON.stringify(todoList.toJSON()));
+                ws.send(JSON.stringify([todoList.toJSON()]));
                 this.saveTodoList(todoList);
             }
 
@@ -96,7 +96,7 @@
                 this._getAllTodos();
                 ws.addEventListener("message", (e) => {
                     let todoList = JSON.parse(e.data);
-                    this.saveTodoList(todoList);
+                    this.saveTodoList(...todoList);
                 });
             }
 
