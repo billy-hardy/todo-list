@@ -7,5 +7,5 @@ if(loc.protocol === "https:") {
     new_uri = "ws:";
 }
 new_uri += "//" + loc.host;
-var ws = new WebSocket("wss://morning-spire-54006.herokuapp.com:29204/");
+var ws = new WebSocket("wss://morning-spire-54006.herokuapp.com/");
 
