@@ -16,7 +16,9 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#2.0-preview",
-    "moment": "^2.17.1"
+    "moment": "^2.17.1",
+    "rxjs-dom": "https://github.com/Reactive-Extensions/RxJS-DOM.git",
+    "rxjs": "^4.1.0"
   },
   "resolutions": {
     "polymer": "2.0-preview",

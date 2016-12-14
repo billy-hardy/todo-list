@@ -54,12 +54,12 @@
 
             _saveNewTodoList(e) {
                 let todoList = e.detail;
-                ws.send(JSON.stringify([todoList.toJSON()]));
+                socket.onNext(JSON.stringify([todoList.toJSON()]));
                 this.saveTodoList(todoList);
             }
 
             _publishAll() {
-                ws.send(JSON.stringify(this.todoLists));
+                socket.onNext(JSON.stringify(this.todoLists));
             }
 
             saveTodoList(todoList) {
@@ -94,7 +94,7 @@
                 super();
                 this.service = new TodoListService("todolist");
                 this._getAllTodos();
-                ws.addEventListener("message", (e) => {
+                socket.subscribe(e => {
                     let todoList = JSON.parse(e.data);
                     this.saveTodoList(...todoList);
                 });
