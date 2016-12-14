@@ -5,6 +5,12 @@ class TodoItemModel {
         this.done = done;
     }
 
+    static fromJSON(json) {
+        let instance = new this(json.content || "", json.done || false);
+        instance.id = json.id;
+        return instance
+    }
+
     toJSON() {
         return {
             id: this.id,
@@ -21,6 +27,13 @@ class TodoListModel {
         this.archived = archived;
         this.todos = todos;
         this.tags = new Set(tags);
+    }
+
+    static fromJSON(json) {
+        let todos = (json.todos||[]).map(todo => TodoItemModel.fromJSON(todo));
+        let instance = new this(json.name || "", json.archived || false, todos, json.tags || []);
+        instance.id = json.id;
+        return instance
     }
 
     add(...todos) {
@@ -43,7 +56,7 @@ class TodoListModel {
             name: this.name,
             archived: this.archived,
             todos: this.todos,
-            tags: this.tags
+            tags: Array.from(this.tags)
         };
     }
 }

@@ -20,6 +20,9 @@
                 position: absolute;
                 bottom: 16px;
             }
+            button {
+                @apply --fancy-button;
+            }
         </style>
         <div class="top">
             <dom-repeat items="{{todoLists}}">
@@ -33,6 +36,7 @@
                 </template>
             </dom-repeat>
             <button on-click="_publishAll">Publish All</button>
+            <button on-click="_fetchAll">Fetch All</button>
         </div>
         <todo-list-input id="todoListInput"
              on-todo-list="_saveNewTodoList">
@@ -54,16 +58,31 @@
 
             _saveNewTodoList(e) {
                 let todoList = e.detail;
-                socket.onNext(JSON.stringify([todoList.toJSON()]));
-                this.saveTodoList(todoList);
+                let message = {
+                    command: "save",
+                    data: [todoList.toJSON()]
+                };
+                MyWebSocket.onNext(JSON.stringify(message));
+                this.saveTodoLists(todoList);
             }
 
             _publishAll() {
-                socket.onNext(JSON.stringify(this.todoLists));
+                let message = {
+                    command: "save",
+                    data: this.todoLists
+                };
+                MyWebSocket.onNext(JSON.stringify(message));
             }
 
-            saveTodoList(todoList) {
-                this.service.saveTodoList(todoList).then(() => {
+            _fetchAll() {
+                let message = {
+                    command: "fetch",
+                };
+                MyWebSocket.onNext(JSON.stringify(message));
+            }
+
+            saveTodoLists(...todoList) {
+                this.service.saveTodoLists(...todoList).then(() => {
                     this.$.todoListInput.todoList = new TodoListModel();
                     this._getAllTodos();
                 });
@@ -71,7 +90,7 @@
 
             _updateTodoList(e) {
                 let todoList = e.detail;
-                this.service.updateTodoList(todoList).then(() => {
+                this.service.updateTodoLists(todoList).then(() => {
                     console.log("Success!");
                 },() => {
                     console.log("Failure!");
@@ -94,9 +113,16 @@
                 super();
                 this.service = new TodoListService("todolist");
                 this._getAllTodos();
-                socket.subscribe(e => {
-                    let todoList = JSON.parse(e.data);
-                    this.saveTodoList(...todoList);
+                observable.subscribe(e => {
+                    let message = JSON.parse(e.data);
+                    if(message.command == "save") {
+                        let todoLists = message.data.filter(t1 => {
+                             return !this.todoLists.some(t2 => {
+                                 return t1.id == t2.id;
+                             });
+                        })
+                        this.push("todoLists", ...todoLists);
+                    }
                 });
             }
 

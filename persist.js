@@ -7,20 +7,24 @@ class Service {
         });
     }
 
-    write(data) {
-        return this.dbPromise.then(db => {
-            const tx = db.transaction(this.store, 'readwrite');
-            tx.objectStore(this.store).put(data);
-            return tx.complete;
-        });
+    write(...data) {
+        return Promise.all(data.map((data) => {
+            return this.dbPromise.then(db => {
+                const tx = db.transaction(this.store, 'readwrite');
+                tx.objectStore(this.store).put(data);
+                return tx.complete;
+            });
+        }));
     }
 
-    update(data) {
-        return this.dbPromise.then(db => {
-            const tx = db.transaction(this.store, 'readwrite');
-            tx.objectStore(this.store).put(data);
-            return tx.complete;
-        });
+    update(...data) {
+        return Promise.all(data.map((data) => {
+            return this.dbPromise.then(db => {
+                const tx = db.transaction(this.store, 'readwrite');
+                tx.objectStore(this.store).put(data);
+                return tx.complete;
+            });
+        }));
     }
 
     delete(id) {
@@ -61,23 +65,25 @@ class TodoListService extends Service {
         super(store);
     }
 
-    saveTodoList(todoList) {
-        return this.write(todoList);
+    saveTodoLists(...todoLists) {
+        return this.write(...todoLists);
     }
 
     getTodoList(id) {
-        return this.read(id);
+        return this.read(id).then(todoList => TodoListModel.fromJSON(todoList));
     }
 
     getAllTodoLists() {
-        return this.getAll();
+        return this.getAll().then(todoLists => {
+            return todoLists.map(todoList => TodoListModel.fromJSON(todoList));
+        });
     }
 
     deleteTodoList(id) {
         return this.delete(id);
     }
 
-    updateTodoList(todoList) {
-        return this.update(todoList);
+    updateTodoLists(...todoLists) {
+        return this.update(...todoLists);
     }
 }
