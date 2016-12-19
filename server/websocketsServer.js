@@ -1,3 +1,4 @@
+let Rx = require('rx-js')
 var WebSocketServer = require('ws').Server,
     wss = new WebSocketServer({ port: process.env.PORT});
 console.log("Deploy port: " + process.env.PORT);
