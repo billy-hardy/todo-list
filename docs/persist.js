@@ -1,4 +1,4 @@
-let idb = require("idb");
+let idb = require('idb');
 
 class Service {
     constructor(store, keypath = "id") {
