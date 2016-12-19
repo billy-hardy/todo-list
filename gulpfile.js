@@ -19,10 +19,10 @@ gulp.task('vulcanize', function () {
             scriptInHead: false, // true is default 
             onlySplit: false
         }))
-        .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('docs'));
 });
 
 gulp.task('copy-js', function() {
     return gulp.src('src/js/*')
-        .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('docs'));
 });
