@@ -59,31 +59,31 @@ class Service {
 }
 
 
-class TodoListService extends Service {
+class TodoListService {
 
     constructor(store) {
-        super(store);
+        this.servive = new Service(store);
     }
 
     saveTodoLists(...todoLists) {
-        return this.write(...todoLists);
+        return this.service.write(...todoLists);
     }
 
     getTodoList(id) {
-        return this.read(id).then(todoList => TodoListModel.fromJSON(todoList));
+        return this.service.read(id).then(todoList => TodoListModel.fromJSON(todoList));
     }
 
     getAllTodoLists() {
-        return this.getAll().then(todoLists => {
+        return this.service.getAll().then(todoLists => {
             return todoLists.map(todoList => TodoListModel.fromJSON(todoList));
         });
     }
 
     deleteTodoList(id) {
-        return this.delete(id);
+        return this.service.delete(id);
     }
 
     updateTodoLists(...todoLists) {
-        return this.update(...todoLists);
+        return this.service.update(...todoLists);
     }
 }
